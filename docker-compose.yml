@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  nginx:
+    build: docker/nginx
+    container_name: nginx80
+    ports:
+      - 80:80
+    volumes_from:
+      - app
+  app:
+    command: "true"
+    image: alpine:3.4
+    volumes:
+      - .:/var/www/phreeze
+  php:
+    build: docker/php
+    container_name: phreeze
+    expose:
+      - 9000
+    volumes:
+      - composer-cache:/composer/cache
+    volumes_from:
+      - app
+    
+volumes:
+  composer-cache:
+    driver: local
